@@ -13,11 +13,16 @@ class User extends Manager
             $req->bindParam(':email', $email, PDO::PARAM_STR);
             $req->execute();
             $user = $req->fetch();
-            if (!$user || !password_verify($password, $user['password'])) {
+            if(!$user || $password !== $user['password']) {
                 throw new InvalidArgumentException('Failed to LogIn. Email or password incorrect');
             } else {
                 return $user['username'];
             }
+            // if (!$user || !password_verify($password, $user['password'])) {
+            //     throw new InvalidArgumentException('Failed to LogIn. Email or password incorrect');
+            // } else {
+            //     return $user['username'];
+            // }
         }
     }
     public function register(
@@ -27,7 +32,8 @@ class User extends Manager
         string $password_verif
     ): void {
         if ($this->registerInputIsValid($username, $email, $password, $password_verif)) {
-            $hash = password_hash($password, PASSWORD_DEFAULT);
+            // $hash = password_hash($password, PASSWORD_DEFAULT);
+            $hash = $password;
             $query = 'INSERT INTO users(username, email, password) VALUES(:username, :email, :password)';
             $req = $this->getDb()->prepare($query);
             $req->execute(array(

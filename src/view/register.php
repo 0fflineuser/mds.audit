@@ -34,7 +34,7 @@ $title = 'Register';
 </form>
 <a class="btn btn-secondary" href='index.php?action=login'>login</a>
 
-<script type="text/javascript" src="public/js/inscription.js"></script>
+<script type="text/javascript" src="js/inscription.js"></script>
 
 <?php $content = ob_get_clean(); ?>
 <?php require('template.php'); ?>

@@ -35,7 +35,7 @@ class UserController
             $password = isset($_POST['password']) ? $_POST['password'] : null;
             $username = $this->user->login($email, $password);
             $_SESSION['username'] = $username;
-            $this->redirect('index.php?action=welcome');
+            $this->redirect('index.php?action=welcome'); 
         }
         require(__DIR__ . '/../view/login.php');
     }
