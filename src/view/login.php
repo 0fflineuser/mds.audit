@@ -1,6 +1,7 @@
 <?php $title = 'LogIn'; ?>
 <?php ob_start(); ?>
 <h1>Login Form</h1>
+<img src="image/image500.jpg" alt="image 500kb">
 <form class="g-3" action="index.php?action=login" method="post">
     <div class="mb-3">
         <label class="form-label" for="email"><strong>Email</b></label>

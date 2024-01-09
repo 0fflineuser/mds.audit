@@ -50,7 +50,7 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`)
     VALUES (1, 'bergeault', 'nicolas.bergeault@gmail.com', '967520ae23e8ee14888bae72809031b98398ae4a636773e18fff917d77679334');
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`)
-    VALUES (1, 'test', 'test@test.fr', '$2y$10$wBK01MRtn9gpV2P8EDQhhOCLz0RztRez7anfUOefxHdV2gQbuB8SG');
+    VALUES (2, 'test', 'test@test.fr', '$2y$10$wBK01MRtn9gpV2P8EDQhhOCLz0RztRez7anfUOefxHdV2gQbuB8SG');
 
 --
 -- Index pour les tables déchargées
