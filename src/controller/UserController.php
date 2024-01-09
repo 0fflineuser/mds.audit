@@ -13,16 +13,16 @@ class UserController
 
     public function handleRequest()
     {
-        $action = isset($_GET['action']) ? $_GET['action'] : NULL;
+        $action = isset($_GET['action']) ? $_GET['action'] : null;
         if ($action === 'login') {
             $this->login();
-        } else if ($action === 'register') {
+        } elseif ($action === 'register') {
             $this->register();
-        } else if ($action === 'welcome') {
+        } elseif ($action === 'welcome') {
             $this->welcome();
-        } else if ($action === 'logout') {
+        } elseif ($action === 'logout') {
             $this->logout();
-        } else if (is_null($action)) {
+        } elseif (is_null($action)) {
             $this->home();
         } else {
             throw new InvalidArgumentException('Page for ' . $action . ' was not found!');
@@ -31,8 +31,8 @@ class UserController
     public function login(): void
     {
         if (isset($_POST['submit'])) {
-            $email = isset($_POST['email']) ? $_POST['email'] : NULL;
-            $password = isset($_POST['password']) ? $_POST['password'] : NULL;
+            $email = isset($_POST['email']) ? $_POST['email'] : null;
+            $password = isset($_POST['password']) ? $_POST['password'] : null;
             $username = $this->user->login($email, $password);
             $_SESSION['username'] = $username;
             $this->redirect('index.php?action=welcome');
@@ -42,10 +42,10 @@ class UserController
     public function register(): void
     {
         if (isset($_POST['submit'])) {
-            $username = isset($_POST['username']) ? $_POST['username'] : NULL;
-            $email = isset($_POST['email']) ? $_POST['email'] : NULL;
-            $password = isset($_POST['password']) ? $_POST['password'] : NULL;
-            $password_verif = isset($_POST['password_verif']) ? $_POST['password_verif'] : NULL;
+            $username = isset($_POST['username']) ? $_POST['username'] : null;
+            $email = isset($_POST['email']) ? $_POST['email'] : null;
+            $password = isset($_POST['password']) ? $_POST['password'] : null;
+            $password_verif = isset($_POST['password_verif']) ? $_POST['password_verif'] : null;
             $this->user->register($username, $email, $password, $password_verif);
             $this->redirect('index.php?action=login');
         }
@@ -58,7 +58,11 @@ class UserController
     }
     public function welcome(): void
     {
-        require(__DIR__ . '/../view/welcome.php');
+        if(array_key_exists('username', $_SESSION)) {
+            require(__DIR__ . '/../view/welcome.php');
+        } else {
+            require(__DIR__ . '/../view/login.php');
+        }
     }
     public function home(): void
     {

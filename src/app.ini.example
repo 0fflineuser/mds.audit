@@ -1,6 +1,6 @@
 [database]
-db_host     = host
-db_name     = name
-db_user     = user
-db_password = password
+db_host     = mysql
+db_name     = laravel
+db_user     = root
+db_password = your_mysql_root_password
 db_port     = 3306
