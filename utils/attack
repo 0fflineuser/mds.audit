@@ -7,53 +7,62 @@ if [[ -z $HASH ]]; then
   exit 2
 fi
 
+FOUND=false
 
-echo ""
 while IFS= read -r PASSWORD; do
-  echo "---------- $PASSWORD ---------"
+  echo "---------- $PASSWORD ----------"
   echo "Vérification du sha1 ..."
-  CHECK=$(echo -n "$HASH" | sha1sum | awk '{print $1}')
+  CHECK=$(echo -n "$PASSWORD" | sha1sum | awk '{print $1}')
   if [[ "$CHECK" == "$HASH" ]]; then
-    echo "HASH trouvé! sha1 de $PASSWORD"
+    echo "HASH trouvé! $HASH est le sha1 de $PASSWORD"
+    FOUND=true
     break
   fi
+
   echo "Vérification du sha256 ..."
-  CHECK=$(echo -n "$HASH" | sha1sum | awk '{print $1}')
+  CHECK=$(echo -n "$PASSWORD" | sha256sum | awk '{print $1}')
   if [[ "$CHECK" == "$HASH" ]]; then
-    echo "HASH trouvé! sha256 de $PASSWORD"
+    echo "HASH trouvé! $HASH est le sha256 de $PASSWORD"
     break
   fi
+
   echo "Vérification du md5 ..."
-  CHECK=$(echo -n "$HASH" | md5sum | awk '{print $1}')
+  CHECK=$(echo -n "$PASSWORD" | md5sum | awk '{print $1}')
   if [[ "$CHECK" == "$HASH" ]]; then
-    echo "HASH trouvé! md5 de $PASSWORD"
+    echo "HASH trouvé! $HASH est le md5 de $PASSWORD"
     break
   fi
 done < ./passwords.txt
 
-read -p "Voulez vous essayer de vous connecter ?" YN
+echo "-------------------------------"
 
+if [[ $FOUND == true ]];then
+  read -p "Voulez vous essayer de vous connecter ? (Y/n) " YN
 
-case $YN in
-  [yY] )
-    read -r -p 'Identifiant: ' USERNAME
-    if [[ -z $USERNAME ]]; then
-      >&2 echo "Il manque l'identifiant"
-      exit 1
-    fi
+  case $YN in
+    [yY] )
+      read -r -p 'Identifiant: ' USERNAME
+      if [[ -z $USERNAME ]]; then
+        >&2 echo "Il manque l'identifiant"
+        exit 1
+      fi
 
-    read -p "Server (defaut http://localhost:8080): ?" SERVER
+      read -p "Server (defaut http://localhost:8080): ?" SERVER
 
-    SERVER=${SERVER:-http://localhost:8080}
-        HTTP_CODE=$(curl --write-out %{http_code} --silent --output /dev/null -X POST "$SERVER/index.php?action=login" -H "Content-Type: application/x-www-form-urlencoded" -d "email=$USERNAME&password=$HASH&submit=")
-    if [[ "$HTTP_CODE" = "302" ]]; then
-      echo "Le mot de passe est correct"
-    else
-      echo "Le mot de passe est incorrect"
-    fi
-    ;;
-	[nN] )
-    exit 0
-		;;
-	* ) exit 0 ;;
-esac
+      SERVER=${SERVER:-http://localhost:8080}
+          HTTP_CODE=$(curl --write-out %{http_code} --silent --output /dev/null -X POST "$SERVER/index.php?action=login" -H "Content-Type: application/x-www-form-urlencoded" -d "email=$USERNAME&password=$HASH&submit=")
+      if [[ "$HTTP_CODE" = "302" ]]; then
+        echo "Le mot de passe est correct"
+      else
+        echo "Le mot de passe est incorrect"
+      fi
+      ;;
+    [nN] )
+      exit 0
+      ;;
+    * ) exit 0 ;;
+  esac
+else
+  echo "Le mot de passe n'a pas été trouvé."
+fi
+
