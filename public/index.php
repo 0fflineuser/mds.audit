@@ -2,13 +2,10 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-Logger::configure("config.xml");
-
 session_start();
 
 
 require(__DIR__ . '/../src/controller/UserController.php');
-
 
 try {
     $userController = new UserController();

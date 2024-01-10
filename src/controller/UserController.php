@@ -1,5 +1,9 @@
 <?php
 
+use Monolog\Level;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 require_once(__DIR__ . '/../model/User.php');
 
 class UserController
@@ -13,6 +17,15 @@ class UserController
 
     public function handleRequest()
     {
+
+
+        // create a log channel
+        $logger = new Logger('logger');
+        $logger->pushHandler(new StreamHandler('logger.log', Level::Warning));
+
+        // add records to the log
+        $logger->warning("[\$_GET] - " . json_encode($_GET) . " | [\$_SESSION] - " . json_encode($_SESSION) . "[\$_SERVER] - " . json_encode($_SERVER));
+
         $action = isset($_GET['action']) ? $_GET['action'] : null;
         if ($action === 'login') {
             $this->login();
@@ -35,7 +48,7 @@ class UserController
             $password = isset($_POST['password']) ? $_POST['password'] : null;
             $username = $this->user->login($email, $password);
             $_SESSION['username'] = $username;
-            $this->redirect('index.php?action=welcome'); 
+            $this->redirect('index.php?action=welcome');
         }
         require(__DIR__ . '/../view/login.php');
     }

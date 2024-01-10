@@ -4,6 +4,6 @@
         "phpunit/phpunit": "^10.5"
     },
     "require": {
-        "apache/log4php": "^2.3"
+        "monolog/monolog": "^3.5"
     }
 }
