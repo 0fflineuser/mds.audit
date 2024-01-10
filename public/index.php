@@ -2,6 +2,8 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+Logger::configure("config.xml");
+
 session_start();
 
 
