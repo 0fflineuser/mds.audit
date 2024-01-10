@@ -18,10 +18,6 @@ jobs:
       # url: https://theo.rodrigues.rennes.mds-project.fr
       url: 192.162.70.162
     steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@master
-      - name: Install dependencies 👨💻
-        run: composer install
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
@@ -32,5 +28,4 @@ jobs:
           ssh-keyscan -H ${{ secrets.IP }} >> ~/.ssh/known_hosts
       - name: copy builds to server
         run: |
-          rsync -vrm  .output/* ${{ secrets.USER_IP }}:/var/www/mds_audit/
-          ssh ${{ secrets.USER_IP }} "docker compose restart"
+          ssh ${{ secrets.USER_IP }} "cd /var/www/mds_audit/ && git pull && docker compose down && docker compose build && docker compose up -d"
