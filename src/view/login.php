@@ -1,6 +1,7 @@
 <?php $title = 'LogIn'; ?>
 <?php ob_start(); ?>
-<img src="image/image500.jpg" alt="image 500kb">
+<!-- <img src="image/image500.jpg" alt="image 500kb"> -->
+<img src="image/hacker.webp" alt="Un hacker dans un fond noir avec des ecritures binaires."  width="100%" />
 <h1>Login Form</h1>
 <form class="g-3" id="formulaire" action="index.php?action=login" method="post">
     <div class="mb-3">
