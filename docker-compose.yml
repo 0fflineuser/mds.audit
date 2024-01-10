@@ -3,7 +3,6 @@ services:
   
   #PHP Service
   app:
-    command: "composer install"
     build:
       context: .
       dockerfile: Dockerfile
