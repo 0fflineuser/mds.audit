@@ -16,8 +16,8 @@ while IFS= read -r PASSWORD; do
   HASHTYPE='sha1'
   CHECK=$(echo -n "$PASSWORD" | sha1sum | awk '{print $1}')
   if [[ "$CHECK" == "$HASH" ]]; then
-    echo "HASH trouvé! $HASH est le sha1 de $PASSWORD"
     FOUND=true
+    echo "HASH trouvé! $HASH est le sha1 de $PASSWORD"
     break
   fi
 
@@ -25,6 +25,7 @@ while IFS= read -r PASSWORD; do
   HASHTYPE='sha256'
   CHECK=$(echo -n "$PASSWORD" | sha256sum | awk '{print $1}')
   if [[ "$CHECK" == "$HASH" ]]; then
+    FOUND=true
     echo "HASH trouvé! $HASH est le sha256 de $PASSWORD"
     break
   fi
@@ -33,6 +34,7 @@ while IFS= read -r PASSWORD; do
   HASHTYPE='md5'
   CHECK=$(echo -n "$PASSWORD" | md5sum | awk '{print $1}')
   if [[ "$CHECK" == "$HASH" ]]; then
+    FOUND=true
     echo "HASH trouvé! $HASH est le md5 de $PASSWORD"
     break
   fi
@@ -51,7 +53,12 @@ if [[ $FOUND == true ]];then
   fi
 
   echo "Ajout du nom d'utilisateur, mot de passe et type de hash dans database.json..."
-
+  DATABASE_IS_VALID=$(jq '.data | type == "array"' database.json 2>/dev/null)
+  if [[ $DATABASE_IS_VALID == true || $? != 0  ]]; then
+    :
+  else
+    echo "{ \"data\": []}" > database.json
+  fi
   JSON=$(jq ".data += [{\"login\": \"$USERNAME\", \"password\": \"$PASSWORD\", \"hashtype\": \"$HASHTYPE\"}]" database.json)
   echo "$JSON" > database.json
 

@@ -1,3 +1,4 @@
 app.ini
 vendor
 .php-cs-fixer.cache
+database.json
