@@ -42,39 +42,42 @@ done < ./passwords.txt
 
 echo "-------------------------------"
 
-if [[ $FOUND == true ]];then
-
-  read -r -p 'Identifiant: ' USERNAME
-  if [[ -z $USERNAME ]]; then
-    >&2 echo "Il manque l'identifiant"
-    exit 2
-  fi
-
+save_data(){
   echo "Ajout du nom d'utilisateur, mot de passe et type de hash dans database.json..."
   DATABASE_IS_VALID=$(jq '.data | type == "array"' database.json 2>/dev/null)
-  if [[ $DATABASE_IS_VALID == true || $? != 0  ]]; then
-    :
-  else
+  if [[ $DATABASE_IS_VALID != true || $? != 0  ]]; then
     echo "{ \"data\": []}" > database.json
   fi
   JSON=$(jq ".data += [{\"login\": \"$USERNAME\", \"password\": \"$PASSWORD\", \"hashtype\": \"$HASHTYPE\"}]" database.json)
   echo "$JSON" > database.json
+}
+
+read -r -p 'Identifiant: ' USERNAME
+if [[ -z $USERNAME ]]; then
+  >&2 echo "Il manque l'identifiant"
+  exit 2
+fi
+
+if [[ $FOUND == true ]];then
 
   read -rp "Voulez vous essayer de vous connecter ? (Y/n) " YN
 
   case $YN in
     [yY] )
-      read -rp "Server (defaut http://localhost:8080): ?" SERVER
+
+      read -rp "Server (defaut http://localhost:8080): ? " SERVER
 
       SERVER=${SERVER:-http://localhost:8080}
       HTTP_CODE=$(curl --write-out %{http_code} --silent --output /dev/null -X POST "$SERVER/index.php?action=login" -H "Content-Type: application/x-www-form-urlencoded" -d "email=$USERNAME&password=$HASH&submit=")
       if [[ "$HTTP_CODE" = "302" ]]; then
         echo "Le mot de passe est correct"
+        save_data
       else
-        echo "Le mot de passe est incorrect"
+        echo "Le mot de passe est incorrect. [http_code] $HTTP_CODE"
       fi
       ;;
     [nN] )
+      save_data
       exit 0
       ;;
     * ) exit 0 ;;
