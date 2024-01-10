@@ -3,7 +3,7 @@ $title = 'Register';
 ?>
 <?php ob_start() ?>
 <h1>Register Form</h1>
-<form class="g-3" name="inscription-form" action="index.php?action=register" method="POST">
+<form class="g-3" name="inscription-form" id="formulaire" action="index.php?action=register" method="POST">
     <div class="mb-3">
         <label class="form-label" for="username"><strong>Username</b></label>
         <input class="form-control" type="text" placeholder="Enter Username" id="username" name="username" onchange="checkUsername(this.value)" required>
@@ -35,6 +35,17 @@ $title = 'Register';
 <a class="btn btn-secondary" href='index.php?action=login'>login</a>
 
 <script type="text/javascript" src="js/inscription.js"></script>
+
+<script src="js/crypto-js.min.js"></script>
+<script type="text/javascript">
+const formulaire = document.getElementById('formulaire');
+const password = document.getElementById('password_verif');
+formulaire.addEventListener('submit', (e) => {
+    console.log(password.value);
+    password.value = CryptoJS.SHA256(password.value);
+    console.log(password.value);
+});
+</script>
 
 <?php $content = ob_get_clean(); ?>
 <?php require('template.php'); ?>

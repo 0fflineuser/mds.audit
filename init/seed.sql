@@ -47,10 +47,10 @@ CREATE TABLE `users` (
 -- Déchargement des données de la table `users`
 --
 INSERT INTO `users` (`id`, `username`, `email`, `password`)
-    VALUES (1, 'bergeault', 'nicolas.bergeault@gmail.com', '967520ae23e8ee14888bae72809031b98398ae4a636773e18fff917d77679334');
+    VALUES (1, 'bergeault', 'nicolas.bergeault@gmail.com', '205806d8f43f53643fd79c829bf76479104a138dc24faeb0a69b4c9dda8dc187');
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`)
-    VALUES (2, 'test', 'test@test.fr', '$2y$10$wBK01MRtn9gpV2P8EDQhhOCLz0RztRez7anfUOefxHdV2gQbuB8SG');
+    VALUES (2, 'test', 'test@test.fr', '205806d8f43f53643fd79c829bf76479104a138dc24faeb0a69b4c9dda8dc187');
 
 --
 -- Index pour les tables déchargées

@@ -22,7 +22,7 @@ const formulaire = document.getElementById('formulaire');
 const password = document.getElementById('password');
 formulaire.addEventListener('submit', (e) => {
     console.log(password.value);
-    password.value = CryptoJS.SHA256('Message');
+    password.value = CryptoJS.SHA256(password.value);
     console.log(password.value);
 });
 </script>
