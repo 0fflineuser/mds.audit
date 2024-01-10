@@ -33,12 +33,6 @@ jobs:
       - name: Git pull on production server
         run: |
           ssh ${{ secrets.USER_IP }} "cd /var/www/mds_audit/ && git pull"
-      - name: Down docker
+      - name: Down, Build, Up docker
         run: |
-          ssh ${{ secrets.USER_IP }} "cd /var/www/mds_audit/ && docker compose down"
-      - name: Build docker
-        run: |
-          ssh ${{ secrets.USER_IP }} "cd /var/www/mds_audit/ && docker compose build"
-      - name: Up docker
-        run: |
-          ssh ${{ secrets.USER_IP }} "cd /var/www/mds_audit/ && docker compose up -d"
+          ssh ${{ secrets.USER_IP }} "cd /var/www/mds_audit/ && docker compose down && docker compose build && docker compose up -d"
