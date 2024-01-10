@@ -42,8 +42,6 @@ done < ./passwords.txt
 
 echo "-------------------------------"
 
-# f940323752de148084ca9b029041f5021f5cd989
-
 if [[ $FOUND == true ]];then
 
   read -r -p 'Identifiant: ' USERNAME
