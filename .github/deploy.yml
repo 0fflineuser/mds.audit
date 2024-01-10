@@ -1,0 +1,41 @@
+name: Deploy
+
+# on:
+#   push:
+#     branches:
+#       - main
+#       - master
+#   pull_request:
+#     branches:
+#       - main
+#       - master
+on: 
+  workflow_dispatch:
+    branches:
+        - main
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      # url: https://theo.rodrigues.rennes.mds-project.fr
+      url: 192.162.70.162
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@master
+      - name: Install dependencies 👨💻
+        run: npm i
+      - name: Build for production 🏗️
+        run: npm run build
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIV_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PUB_KEY }}" > ~/.ssh/id_rsa.pub
+          chmod 600 ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa.pub
+          ssh-keyscan -H ${{ secrets.IP }} >> ~/.ssh/known_hosts
+      - name: copy builds to server
+        run: |
+          rsync -vrm  .output/* ${{ secrets.USER_IP }}:/var/www/mds_audit/
+          ssh ${{ secrets.USER_IP }} "docker compose restart"
